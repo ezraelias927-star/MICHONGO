@@ -1,0 +1,14 @@
+.app-main {
+  max-width: var(--content-w);
+  margin: 0 auto;
+  padding:
+    calc(var(--header-h) + var(--space-4))
+    var(--space-4)
+    calc(var(--nav-h) + var(--space-6) + env(safe-area-inset-bottom));
+}
+
+.feed-placeholder {
+  padding: var(--space-6) 0;
+  text-align: center;
+  color: var(--color-text-muted);
+}
