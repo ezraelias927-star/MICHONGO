@@ -1,0 +1,13 @@
+/* Daraja kuu la kuficha vitu */
+.hidden {
+    display: none !important;
+}
+
+/* Mtindo wa picha ya mtumiaji ndani ya bottom navigation */
+.nav-avatar-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid #ff7700; /* Boresha rangi kulingana na muonekano wako */
+}

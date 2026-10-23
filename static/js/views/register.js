@@ -3,6 +3,7 @@
  */
 import { authAPI } from '../api/auth.js';
 import { store } from '../store.js';
+import { checkAndUpdateNav } from '../utils/auth-check.js'; 
 
 export function renderRegisterView() {
   return `
@@ -81,6 +82,8 @@ export function attachRegisterEvents() {
 
     if (result.success) {
       store.setState({ isAuthenticated: true, currentUser: result.user });
+      await checkAndUpdateNav()
+
       window.location.hash = '#/';
     } else {
       errorBox.textContent = result.error || "Imeshindikana kusajili.";

@@ -2,8 +2,9 @@
  * MICHONGO - Main Entry Point
  */
 import { initRouter } from './router.js';
-
+import { setupAuthGuard } from './utils/postverifier.js';
 document.addEventListener('DOMContentLoaded', async () => {
+  setupAuthGuard();
   
   // 1. Dhibiti Hamburger Menu ya Simu (Slide-in kutoka kushoto)
   const menuBtn = document.getElementById('menu-btn');

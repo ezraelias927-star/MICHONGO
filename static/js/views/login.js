@@ -1,8 +1,9 @@
 /**
- * MICHONGO - Login View
+ * MICHONGO - Login View (Imesanifiwa na Smart Redirect & Auto Nav Sync)
  */
 import { authAPI } from '../api/auth.js';
 import { store } from '../store.js';
+import { checkAndUpdateNav } from '../utils/auth-check.js'; 
 
 export function renderLoginView() {
   return `
@@ -59,13 +60,40 @@ export function attachLoginEvents() {
     submitBtn.textContent = "Inaingia...";
     submitBtn.disabled = true;
 
-    const result = await authAPI.login(identifier, password);
+    try {
+      const result = await authAPI.login(identifier, password);
 
-    if (result.success) {
-      store.setState({ isAuthenticated: true, currentUser: result.user });
-      window.location.hash = '#/';
-    } else {
-      errorBox.textContent = result.error || "Imeshindikana kuingia.";
+      if (result && result.success) {
+        // 1. Weka state ya mafanikio kwenye store
+        store.setState({ isAuthenticated: true, currentUser: result.user });
+
+        // 2. Sasisha navbar papohapo kimya kimya
+        if (typeof checkAndUpdateNav === 'function') {
+          await checkAndUpdateNav();
+        }
+
+        // 3. Angalia kama kulikuwa na route aliyekuwa anataka kwenda kabla hajasimamishwa
+        const savedRedirect = sessionStorage.getItem('redirectAfterLogin');
+
+        if (savedRedirect) {
+          // Futa kwenye storage isije ikasumbua tena
+          sessionStorage.removeItem('redirectAfterLogin');
+          // Mrudishe kule kule alikotaka kwenda (Mfano: #/new)
+          window.location.hash = savedRedirect;
+        } else {
+          // Kama hapakuwa na kitu maalum, mpeleke Home ya kawaida
+          window.location.hash = '#/';
+        }
+
+      } else {
+        errorBox.textContent = (result && result.error) || "Imeshindikana kuingia. Angalia taarifa zako.";
+        errorBox.style.display = 'block';
+        submitBtn.textContent = "Ingia";
+        submitBtn.disabled = false;
+      }
+    } catch (err) {
+      console.error('Login submit error:', err);
+      errorBox.textContent = "Hitilafu ya mtandao. Jaribu tena.";
       errorBox.style.display = 'block';
       submitBtn.textContent = "Ingia";
       submitBtn.disabled = false;

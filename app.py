@@ -12,6 +12,7 @@ def create_app():
 
 
     from blueprints.auth.register import register_bp
+    from blueprints.auth.logout import logout_bp
     from blueprints.auth.login import login_bp
     from blueprints.post.post import post_bp
     from blueprints.post.comment import comments_bp
@@ -20,6 +21,7 @@ def create_app():
     from blueprints.post.seeposts import seeposts_bp
 
     app.register_blueprint(home_bp)
+    app.register_blueprint(logout_bp)
     app.register_blueprint(comments_bp)
     app.register_blueprint(register_bp)
     app.register_blueprint(login_bp)

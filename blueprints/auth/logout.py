@@ -1,9 +1,8 @@
 from flask import Blueprint, redirect, session, url_for, jsonify, request
 
-# Kama unaiweka ndani ya faili la login, unaweza kutumia hiyohiyo login_bp au kutengeneza bp nyingine
-from blueprints.auth.login import login_bp  # Au tumia bp yako ya auth
+logout_bp=Blueprint('auth_logout', __name__,url_prefix='/auth')
 
-@login_bp.route("/logout", methods=["POST", "GET"])
+@logout_bp.route("/logout", methods=["POST", "GET"])
 def logout():
     # Safisha kabisa session ya mtumiaji
     session.clear()
