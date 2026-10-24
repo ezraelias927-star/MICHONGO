@@ -6,7 +6,9 @@ seeposts_bp = Blueprint('seeposts', __name__, url_prefix='/posts')
 @seeposts_bp.route('/', methods=['GET'])
 def get_posts():
     try:
-        # Unaweza kuchuja kwa kategoria (kama user akibonyeza category fulani)
+        # 1. Pokea page na limit kutoka kwenye Query Parameters (kama hazipo, tumia default values)
+        page = request.args.get('page', 1, type=int)
+        limit = request.args.get('limit', 10, type=int)
         category_id = request.args.get('category_id', type=int)
         
         # Query ya msingi: Panga kuanzia zilizopachikwa (pinned) kwanza, kisha mpya kabisa
@@ -16,14 +18,15 @@ def get_posts():
             query = query.filter_by(category_id=category_id)
             
         # Panga kwanza kwa is_pinned (true iwe juu), kisha created_at mpya kushuka chini
-        posts = query.order_by(Post.is_pinned.desc(), Post.created_at.desc()).all()
+        query = query.order_by(Post.is_pinned.desc(), Post.created_at.desc())
+        
+        # 2. Tumia SQLAlchemy paginate badala ya .all()
+        pagination = query.paginate(page=page, per_page=limit, error_out=False)
+        posts = pagination.items
         
         posts_data = []
         for post in posts:
-            # Pata jina la mwandishi (author) kupitia relationship ya author
             author_name = post.author.username if post.author else "Mtumiaji"
-            
-            # Pata jina la kategoria kama ipo
             category_name = post.category.name if post.category else None
 
             posts_data.append({
@@ -40,7 +43,9 @@ def get_posts():
 
         return jsonify({
             "success": True,
-            "posts": posts_data
+            "posts": posts_data,
+            "has_next": pagination.has_next,  # Itatusaidia kujua kama bado kuna ukurasa mwingine
+            "current_page": page
         }), 200
 
     except Exception as e:
