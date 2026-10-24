@@ -41,19 +41,28 @@ export function attachLoginEvents() {
   const form = document.getElementById('login-form');
   const errorBox = document.getElementById('login-error');
   const submitBtn = document.getElementById('login-submit-btn');
+  const identifierInput = document.getElementById('identifier');
+  const passwordInput = document.getElementById('password');
 
   if (!form) return;
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    // Safisha makosa ya awali
     errorBox.style.display = 'none';
+    errorBox.innerHTML = '';
+    identifierInput.style.borderColor = 'var(--color-border)';
+    passwordInput.style.borderColor = 'var(--color-border)';
 
-    const identifier = document.getElementById('identifier').value.trim();
-    const password = document.getElementById('password').value;
+    const identifier = identifierInput.value.trim();
+    const password = passwordInput.value;
 
     if (!identifier || !password) {
-      errorBox.textContent = "Tafadhali jaza sehemu zote.";
+      errorBox.textContent = "Tafadhali jaza sehemu zote kabla ya kuendelea.";
       errorBox.style.display = 'block';
+      if (!identifier) identifierInput.style.borderColor = '#dc2626';
+      if (!password) passwordInput.style.borderColor = '#dc2626';
       return;
     }
 
@@ -63,38 +72,61 @@ export function attachLoginEvents() {
     try {
       const result = await authAPI.login(identifier, password);
 
+      // Kama imerudi na success: false (kama object)
+      if (result && result.success === false) {
+        throw result;
+      }
+
+      // Kama imerudi vizuri kabisa
       if (result && result.success) {
-        // 1. Weka state ya mafanikio kwenye store
         store.setState({ isAuthenticated: true, currentUser: result.user });
 
-        // 2. Sasisha navbar papohapo kimya kimya
         if (typeof checkAndUpdateNav === 'function') {
           await checkAndUpdateNav();
         }
 
-        // 3. Angalia kama kulikuwa na route aliyekuwa anataka kwenda kabla hajasimamishwa
         const savedRedirect = sessionStorage.getItem('redirectAfterLogin');
-
         if (savedRedirect) {
-          // Futa kwenye storage isije ikasumbua tena
           sessionStorage.removeItem('redirectAfterLogin');
-          // Mrudishe kule kule alikotaka kwenda (Mfano: #/new)
           window.location.hash = savedRedirect;
         } else {
-          // Kama hapakuwa na kitu maalum, mpeleke Home ya kawaida
           window.location.hash = '#/';
         }
-
       } else {
-        errorBox.textContent = (result && result.error) || "Imeshindikana kuingia. Angalia taarifa zako.";
-        errorBox.style.display = 'block';
-        submitBtn.textContent = "Ingia";
-        submitBtn.disabled = false;
+        // Kama imerudi bila success true wala false ya kueleweka
+        throw { errors: ["Imeshindikana kuingia. Jaribu tena."] };
       }
+
     } catch (err) {
-      console.error('Login submit error:', err);
-      errorBox.textContent = "Hitilafu ya mtandao. Jaribu tena.";
+      console.error('Login error caught:', err);
+      
+      let errorMessage = "Barua pepe/username au neno la siri si sahihi.";
+
+      if (err) {
+        // 1. Kama ni array ya errors (mfano: kutoka Flask json)
+        if (Array.isArray(err.errors) && err.errors.length > 0) {
+          errorMessage = err.errors.join('<br>');
+        } 
+        // 2. Kama ni object yenye error string
+        else if (typeof err.error === 'string') {
+          errorMessage = err.error;
+        } 
+        // 3. Kama err yenyewe ni string
+        else if (typeof err === 'string') {
+          errorMessage = err;
+        }
+        // 4. Kama ni JS Error object (mfano err.message)
+        else if (err.message && typeof err.message === 'string' && err.message !== "[object Object]") {
+          errorMessage = err.message;
+        }
+      }
+
+      errorBox.innerHTML = errorMessage;
       errorBox.style.display = 'block';
+
+      identifierInput.style.borderColor = '#dc2626';
+      passwordInput.style.borderColor = '#dc2626';
+
       submitBtn.textContent = "Ingia";
       submitBtn.disabled = false;
     }

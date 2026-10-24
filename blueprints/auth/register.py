@@ -1,20 +1,19 @@
-from flask import Blueprint, render_template, request, session, jsonify, url_for,redirect
+from flask import Blueprint, render_template, request, session, jsonify, url_for, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
-# Badilisha hapa chini iendane na pale ulipoweka model yako ya User (mfano: from models import db, User au app.models)
 from database import db, User  
 
-register_bp = Blueprint('auth', __name__,url_prefix='/auth')
+register_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @register_bp.route("/register", methods=["GET", "POST"])
 def register():
     # Angalia kama mtumiaji amelogin tayari
     if "user_id" in session:
         if request.is_json:
-            return jsonify({"success": True, })
-        return jsonify({'jina':"ezra"})
+            return jsonify({"success": True})
+        return jsonify({'jina': "ezra"})
 
     if request.method == "POST":
-        # Pokea data iwe JSON (kutoka JS/Python script) au Form ya kawaida
+        # Pokea data iwe JSON au Form ya kawaida
         data = request.get_json() if request.is_json else request.form
         
         username = data.get("username", "").strip()
@@ -52,7 +51,10 @@ def register():
 
             # 3. Muingize kwenye session moja kwa moja baada ya kusajiliwa
             session.clear()
+            session.permanent = True  # <--- Hapa tunafanya session yake iwe ya kudumu (Persistent)
+            
             session["user_id"] = new_user.id
+            session["username"] = new_user.username  # Tumeongeza na hii ili jina likae moja kwa moja kwenye session
             
             return jsonify({
                 "success": True, 

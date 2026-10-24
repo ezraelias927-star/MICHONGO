@@ -32,7 +32,7 @@ export function renderRegisterView() {
           </div>
 
           <div style="display: flex; flex-direction: column; gap: var(--space-1);">
-            <label for="reg-confirm-password" style="font-size: 0.875rem; font-weight: 600; color: var(--color-text);">Rudinia Neno la Siri</label>
+            <label for="reg-confirm-password" style="font-size: 0.875rem; font-weight: 600; color: var(--color-text);">Rudia Neno la Siri</label>
             <input type="password" id="reg-confirm-password" name="confirm_password" required placeholder="Rudia password" style="height: 2.75rem; padding: 0 var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-bg); color: var(--color-text); outline: none;">
           </div>
 
