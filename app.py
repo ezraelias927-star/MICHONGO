@@ -19,8 +19,10 @@ def create_app():
     from blueprints.home.home import home_bp
     from blueprints.auth.sess import auth_bp
     from blueprints.post.seeposts import seeposts_bp
+    from blueprints.home.index import indexer_bp
 
     app.register_blueprint(home_bp)
+    app.register_blueprint(indexer_bp)
     app.register_blueprint(logout_bp)
     app.register_blueprint(comments_bp)
     app.register_blueprint(register_bp)
