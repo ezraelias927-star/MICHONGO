@@ -2,6 +2,7 @@ from flask import Flask
 
 from config import Config
 from database import db
+from flask_migrate import Migrate
 
 
 def create_app():
@@ -9,6 +10,7 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
+    Migrate(app, db)
 
 
     from blueprints.auth.register import register_bp

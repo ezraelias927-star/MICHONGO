@@ -159,3 +159,33 @@ class SiteAd(db.Model):
 
     def __repr__(self):
         return f"<SiteAd {self.title} [{self.position}]>"
+
+
+class Pdfcategory(db.Model):
+    __tablename__ = 'pdfcategory'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    slug = db.Column(db.String(100), nullable=False, unique=True)
+    
+    books = db.relationship('PDFBook', backref='category', lazy=True, cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return f"<Category {self.name}>"
+
+class PDFBook(db.Model):
+    __tablename__ = 'pdf_books'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    slug = db.Column(db.String(200), nullable=False, unique=True)
+    description = db.Column(db.Text, nullable=False)
+    file_path = db.Column(db.String(300), nullable=False) 
+    file_size = db.Column(db.String(50), nullable=True)   
+    downloads_count = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
+
+    def __repr__(self):
+        return f"<PDFBook {self.title}>"

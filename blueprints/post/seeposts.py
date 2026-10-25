@@ -8,7 +8,7 @@ def get_posts():
     try:
         # 1. Pokea page na limit kutoka kwenye Query Parameters (kama hazipo, tumia default values)
         page = request.args.get('page', 1, type=int)
-        limit = request.args.get('limit', 10, type=int)
+        limit = request.args.get('limit', 1000, type=int)
         category_id = request.args.get('category_id', type=int)
         
         # Query ya msingi: Panga kuanzia zilizopachikwa (pinned) kwanza, kisha mpya kabisa
