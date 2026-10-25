@@ -55,68 +55,78 @@ export function renderCommentsSection(postId) {
 /**
  * Event Listeners za Comments & Replies
  */
+
 export function attachCommentEvents() {
-  document.addEventListener('click', async (e) => {
+  // Ondoa listener ya zamani kwanza kama ilikuwepo ili kuzuia duplicate execution
+  document.removeEventListener('click', handleGlobalClick);
+  document.addEventListener('click', handleGlobalClick);
+}
+
+async function handleGlobalClick(e) {
+  // A. Kufungua / Kufunga Comments Section
+  if (e.target.classList.contains('comment-toggle-btn')) {
+    e.preventDefault();
+    const postId = e.target.dataset.postId;
+    const section = document.getElementById(`comments-section-${postId}`);
     
-    // A. Kufungua / Kufunga Comments Section
-    if (e.target.classList.contains('comment-toggle-btn')) {
-      e.preventDefault();
-      const postId = e.target.dataset.postId;
-      const section = document.getElementById(`comments-section-${postId}`);
-      
-      if (section) {
-        const isHidden = section.style.display === 'none' || !section.style.display;
-        section.style.display = isHidden ? 'block' : 'none';
-        if (isHidden) {
-          await loadAndRenderComments(postId);
-        }
+    if (section) {
+      const isHidden = section.style.display === 'none' || !section.style.display;
+      section.style.display = isHidden ? 'block' : 'none';
+      if (isHidden) {
+        await loadAndRenderComments(postId);
       }
     }
+  }
 
-    // B. Kutuma Comment mpya au Reply
-    if (e.target.classList.contains('submit-comment-btn')) {
-      e.preventDefault();
-      const postId = e.target.dataset.postId;
-      const parentId = e.target.dataset.parentId || null;
-      
-      const inputId = parentId ? `comment-input-${postId}-${parentId}` : `comment-input-${postId}-main`;
-      const inputEl = document.getElementById(inputId);
-      
-      if (!inputEl) return;
-      const content = inputEl.value.trim();
+  // B. Kutuma Comment mpya au Reply
+  if (e.target.classList.contains('submit-comment-btn')) {
+    e.preventDefault();
+    const postId = e.target.dataset.postId;
+    const parentId = e.target.dataset.parentId || null;
+    
+    const inputId = parentId ? `comment-input-${postId}-${parentId}` : `comment-input-${postId}-main`;
+    const inputEl = document.getElementById(inputId);
+    
+    if (!inputEl) return;
+    const content = inputEl.value.trim();
 
-      if (!content) return;
+    if (!content) return;
 
-      // Badilisha maandishi ya kitufe kuwa yanatuma
-      const originalText = e.target.textContent;
-      e.target.textContent = "Inatuma...";
-      e.target.disabled = true;
+    // Badilisha maandishi ya kitufe kuwa yanatuma
+    const originalText = e.target.textContent;
+    e.target.textContent = "Inatuma...";
+    e.target.disabled = true;
 
+    try {
       const res = await commentsAPI.addComment(postId, content, parentId);
       
       e.target.textContent = originalText;
       e.target.disabled = false;
 
-      if (res.success) {
+      if (res && res.success) {
         inputEl.value = '';
         await loadAndRenderComments(postId);
       } else {
-        alert(res.error || "Imeshindikana kutuma maoni.");
+        alert((res && res.error) || "Imeshindikana kutuma maoni.");
       }
+    } catch (err) {
+      console.error("Hitilafu ya kutuma comment:", err);
+      e.target.textContent = originalText;
+      e.target.disabled = false;
+      alert("Hitilafu ya mtandao. Jaribu tena.");
     }
+  }
 
-    // C. Onyesha / Ficha Form ya Reply chini ya comment ya mtu
-    if (e.target.classList.contains('reply-toggle-btn')) {
-      e.preventDefault();
-      const commentId = e.target.dataset.commentId;
-      const replyBox = document.getElementById(`reply-box-${commentId}`);
-      if (replyBox) {
-        const isHidden = replyBox.style.display === 'none' || !replyBox.style.display;
-        replyBox.style.display = isHidden ? 'flex' : 'none';
-      }
+  // C. Onyesha / Ficha Form ya Reply chini ya comment ya mtu
+  if (e.target.classList.contains('reply-toggle-btn')) {
+    e.preventDefault();
+    const commentId = e.target.dataset.commentId;
+    const replyBox = document.getElementById(`reply-box-${commentId}`);
+    if (replyBox) {
+      const isHidden = replyBox.style.display === 'none' || !replyBox.style.display;
+      replyBox.style.display = isHidden ? 'flex' : 'none';
     }
-
-  });
+  }
 }
 
 /**
