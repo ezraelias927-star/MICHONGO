@@ -2,7 +2,7 @@ from flask import Flask
 
 from config import Config
 from database import db
-from flask_migrate import Migrate
+from flask_migrate import Migrate,upgrade
 
 
 def create_app():
@@ -33,8 +33,13 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(seeposts_bp)
 
+    
     with app.app_context():
-        db.create_all()
+     try:
+        upgrade()
+        print("Database migrated and upgraded successfully!")
+     except Exception as e:
+        print(f"Imetokea error wakati wa kufanya upgrade: {e}")
 
     return app
 
