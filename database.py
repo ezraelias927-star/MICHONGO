@@ -185,7 +185,7 @@ class PDFBook(db.Model):
     downloads_count = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('pdfcategory.id'), nullable=False)
 
     def __repr__(self):
         return f"<PDFBook {self.title}>"
