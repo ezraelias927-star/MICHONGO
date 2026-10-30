@@ -1,0 +1,83 @@
+/* ==========================================================
+   MICHONGO - Books Library & Category UI Styles
+   ========================================================== */
+
+/* Mwonekano wa Kadi ya Kitabu (Book Card Transition & Hover) */
+.transition-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.transition-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Upande wa Sidebar ya Kategoria */
+#categories-container .category-btn {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text, #334155);
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+#categories-container .category-btn:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding-left: 1.25rem; /* Athari nzuri ya kusogea kidogo pembeni */
+}
+
+/* Kitufe cha Kategoria kilichochaguliwa (Active State) */
+#categories-container .category-btn.active {
+    background-color: var(--color-primary, #0d6efd) !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
+}
+
+/* Search Input na Group yake */
+.input-group .form-control {
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    border-color: #cbd5e1;
+    padding: 0.65rem 1rem;
+    font-size: 0.95rem;
+}
+
+.input-group .form-control:focus {
+    border-color: var(--color-primary, #0d6efd);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+.input-group .btn {
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    font-weight: 600;
+}
+
+/* Badge ya Kategoria ndani ya Kadi ya Kitabu */
+.card .badge {
+    letter-spacing: 0.3px;
+    font-weight: 600;
+}
+
+/* Responsive adjustments kwa ajili ya simu za mkononi */
+@media (max-width: 991.98px) {
+    #categories-container {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+    
+    #categories-container .category-btn {
+        white-space: nowrap;
+        border-radius: 50rem !important;
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+    }
+}

@@ -22,6 +22,8 @@ def create_app():
     from blueprints.auth.sess import auth_bp
     from blueprints.post.seeposts import seeposts_bp
     from blueprints.home.index import indexer_bp
+    from blueprints.post.pdf import books_bp
+
 
     app.register_blueprint(home_bp)
     app.register_blueprint(indexer_bp)
@@ -32,6 +34,7 @@ def create_app():
     app.register_blueprint(post_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(seeposts_bp)
+    app.register_blueprint(books_bp)
 
     
     with app.app_context():
