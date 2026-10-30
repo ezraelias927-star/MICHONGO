@@ -32,12 +32,12 @@ def sitemap():
     </url>
 
     <!-- Ukurasa wa kupakia pdf -->
-        <url>
+    <url>
             <loc>https://michongo.dig.co.tz/api/books</loc>
             <lastmod>2026-10-30</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
-        </url>
+    </url>
     
 
 </urlset>"""
