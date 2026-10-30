@@ -31,6 +31,15 @@ def sitemap():
         <priority>0.8</priority>
     </url>
 
+    <!-- Ukurasa wa kupakia pdf -->
+        <url>
+            <loc>https://michongo.dig.co.tz/api/books</loc>
+            <lastmod>2026-10-30</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+        </url>
+    
+
 </urlset>"""
 
     return Response(sitemap_xml, mimetype='application/xml')
