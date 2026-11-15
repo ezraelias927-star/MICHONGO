@@ -5,7 +5,6 @@ import { renderLoginView, attachLoginEvents } from './views/login.js';
 import { renderRegisterView, attachRegisterEvents } from './views/register.js';
 import { renderFeedView, attachFeedEvents } from './views/feed.js';
 import { renderNewPostView, attachNewPostEvents } from './views/newpost.js';
-import { renderAboutView, attachAboutEvents } from './views/about.js';
 // 1. Ingiza view/component ya maktaba ya vitabu
 import { renderBooksView, attachBooksEvents } from './views/booksView.js';
 
@@ -26,10 +25,6 @@ const routes = {
   '/new': {
     render: renderNewPostView,    
     attach: attachNewPostEvents    
-  },
-  '/about': {
-    render: renderAboutView,
-    attach: attachAboutEvents
   },
   // 2. Ongeza route mpya ya vitabu hapa!
   '/books': {
