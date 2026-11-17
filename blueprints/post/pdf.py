@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify,render_template
 from database import db, PDFBook, Pdfcategory
 
 books_bp = Blueprint('books_api', __name__)
@@ -40,8 +40,4 @@ def get_books():
             "category_name": book.category.name  # Inaleta na jina la kategoria moja kwa moja!
         })
 
-    return jsonify({
-        "success": True,
-        "count": len(books_data),
-        "data": books_data
-    }), 200
+    return render_template('pdf.html',books=books_data)
