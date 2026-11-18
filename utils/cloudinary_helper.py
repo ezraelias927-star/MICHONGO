@@ -27,3 +27,4 @@ def upload_to_cloudinary(file_obj, folder_name="michongo_posts"):
 
     except Exception as e:
         return None, str(e)
+    

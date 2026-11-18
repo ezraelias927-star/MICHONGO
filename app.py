@@ -37,12 +37,12 @@ def create_app():
     app.register_blueprint(books_bp)
 
     
-    with app.app_context():
-     try:
-        upgrade()
-        print("Database migrated and upgraded successfully!")
-     except Exception as e:
-        print(f"Imetokea error wakati wa kufanya upgrade: {e}")
+    #with app.app_context():
+     #try:
+        #upgrade()
+        #("Database migrated and upgraded successfully!")
+     #except Exception as e:
+        #print(f"Imetokea error wakati wa kufanya upgrade: {e}")
 
     return app
 
